@@ -1,17 +1,22 @@
 class Owner
-  attr_accessor :pets, :name
+  attr_accessor :name, :pets
   attr_reader :species
 
    @@all = []
 
-   def initialize(species)
-    @species = species
-    @@all << self
-    @pets = {fishes: [], cats: [], dogs: []}
+   def initialize(name)
+    @name = name
+    @species = "human"
+    @pets = {cats: [], dogs: [], fishes: []}
+    @@all << self #owner instance is pushing itself into array of all instances of owners when made
   end
 
    def self.all
     @@all
+  end
+
+   def self.reset_all
+    @@all.clear
   end
 
    def self.count
@@ -19,37 +24,54 @@ class Owner
   end
 
    def say_species
-    "I am a #{species}."
+    "I am a human."
   end
 
    def buy_fish(name)
-    fish = Fish.new(name)
-    pets[:fishes] << fish
-  end
-
-   def buy_cat(name)
-    cat = Cat.new(name)
-    pets[:cats] << cat
+    new_fish = Fish.new(name)
+    @pets[:fishes] << new_fish
   end
 
    def buy_dog(name)
-    dog = Dog.new(name)
-    pets[:dogs] << dog
+    new_dog = Dog.new(name)
+    @pets[:dogs] << new_dog
+  end
+
+   def buy_cat(name)
+    new_cat = Cat.new(name)
+    @pets[:cats] << new_cat
   end
 
    def walk_dogs
-    pets[:dogs].map{|dog|dog.mood = "happy"}
-  end
+    @pets[:dogs].each do |dog|
+      dog.mood=("happy")
+    end
+   end
 
    def play_with_cats
-    pets[:cats].map{|cat|cat.mood = "happy"}
+    @pets[:cats].each do |cat|
+      cat.mood=("happy")
+    end
   end
 
    def feed_fish
-    pets[:fishes].map{|fish|fish.mood = "happy"}
+    @pets[:fishes].each do |fish|
+      fish.mood=("happy")
+    end
   end
 
    def sell_pets
-    pets.each{|pet|pet.mood = "nervous"}
+    @pets.each do |key, value|
+      value.each do |pet|
+        pet.mood=("nervous")
+      end
+    end
+    @pets = {cats: [], dogs: [], fishes: []}
   end
+
+   # @pets = {cats: [], dogs: [], fishes: []}
+  def list_pets
+    "I have #{@pets[:fishes].count} fish, #{@pets[:dogs].count} dog(s), and #{@pets[:cats].count} cat(s)."
+  end
+
 end
